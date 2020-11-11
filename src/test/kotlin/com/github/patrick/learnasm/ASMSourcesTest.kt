@@ -20,6 +20,7 @@
 package com.github.patrick.learnasm
 
 import com.github.patrick.learnasm.sources.HelloWorld
+import com.github.patrick.learnasm.sources.Interface
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -55,5 +56,14 @@ class ASMSourcesTest {
         }
 
         assertEquals("Hello World!", testOutStream.toString().trim())
+    }
+
+    @Test
+    fun testInterface() {
+        assertDoesNotThrow {
+            Interface.main(emptyArray())
+        }
+
+        assertEquals("Sans", testOutStream.toString().trim())
     }
 }
