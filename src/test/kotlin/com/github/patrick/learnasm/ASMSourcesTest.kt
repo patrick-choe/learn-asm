@@ -28,10 +28,7 @@ import java.io.ByteArrayOutputStream
 import java.io.PrintStream
 import kotlin.test.assertEquals
 
-
-@Suppress("unused")
 class ASMSourcesTest {
-
     @Test
     fun testHelloWorld() {
         assertDoesNotThrow {

@@ -22,7 +22,6 @@ package com.github.patrick.learnasm
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
-@Suppress("unused")
 class ASMVersionTest {
     @Test
     fun testASMVersion() {
