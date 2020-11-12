@@ -19,10 +19,9 @@
 
 package com.github.patrick.learnasm
 
+import com.github.patrick.learnasm.sources.Abstract
 import com.github.patrick.learnasm.sources.HelloWorld
 import com.github.patrick.learnasm.sources.Interface
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import java.io.ByteArrayOutputStream
@@ -32,38 +31,50 @@ import kotlin.test.assertEquals
 
 @Suppress("unused")
 class ASMSourcesTest {
-    private val testOutStream = ByteArrayOutputStream()
-    private val testErrStream = ByteArrayOutputStream()
-    private val outStream = System.out
-    private val errStream = System.err
-
-    @BeforeEach
-    fun setUpStreams() {
-        System.setOut(PrintStream(testOutStream))
-        System.setErr(PrintStream(testErrStream))
-    }
-
-    @AfterEach
-    fun restoreStreams() {
-        System.setOut(outStream)
-        System.setErr(errStream)
-    }
 
     @Test
     fun testHelloWorld() {
         assertDoesNotThrow {
-            HelloWorld.main(emptyArray())
-        }
+            val testOutStream = ByteArrayOutputStream()
+            val testErrStream = ByteArrayOutputStream()
+            val outStream = System.out
+            val errStream = System.err
 
-        assertEquals("Hello World!", testOutStream.toString().trim())
+            System.setOut(PrintStream(testOutStream))
+            System.setErr(PrintStream(testErrStream))
+
+            HelloWorld.main(emptyArray())
+
+            assertEquals("Hello World!", testOutStream.toString().trim())
+
+            System.setOut(outStream)
+            System.setErr(errStream)
+        }
     }
 
     @Test
     fun testInterface() {
         assertDoesNotThrow {
-            Interface.main(emptyArray())
-        }
+            val interfaceClass = Interface.createInterface()
+            val implementationClass = Interface.createImplementation()
 
-        assertEquals("Sans", testOutStream.toString().trim())
+            val instance = implementationClass.newInstance()
+            val method = interfaceClass.getDeclaredMethod("sans")
+
+            assertEquals("Sans", method.invoke(instance))
+        }
+    }
+
+    @Test
+    fun testAbstract() {
+        assertDoesNotThrow {
+            val abstractClass = Abstract.createAbstract()
+            val implementationClass = Abstract.createImplementation()
+
+            val instance = implementationClass.newInstance()
+            val method = abstractClass.getDeclaredMethod("sans")
+
+            assertEquals("Sans", method.invoke(instance))
+        }
     }
 }

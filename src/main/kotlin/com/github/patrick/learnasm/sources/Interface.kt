@@ -25,16 +25,6 @@ import org.objectweb.asm.Opcodes
 
 object Interface : ClassLoader() {
     @JvmStatic
-    fun main(args: Array<String>) {
-        val interfaceClass = createInterface()
-        val implementationClass = createImplementation()
-
-        val instance = implementationClass.newInstance()
-        val method = interfaceClass.getDeclaredMethod("sans")
-        println(method.invoke(instance))
-    }
-
-    @JvmStatic
     fun createInterface(): Class<*> {
         val classWriter = ClassWriter(ClassWriter.COMPUTE_MAXS)
 
@@ -75,13 +65,14 @@ object Interface : ClassLoader() {
 
         classWriter.visit(
                 Opcodes.V1_8,
-                Opcodes.ACC_PUBLIC,
-                "com/github/patrick/learnasm/build/Implementation",
+                Opcodes.ACC_PUBLIC + Opcodes.ACC_SUPER,
+                "com/github/patrick/learnasm/build/InterfaceImplementation",
                 null,
                 "java/lang/Object",
                 arrayOf("com/github/patrick/learnasm/build/Interface")
         )
 
+        // <init>
         run {
             methodVisitor = classWriter.visitMethod(
                     Opcodes.ACC_PUBLIC,
@@ -106,6 +97,7 @@ object Interface : ClassLoader() {
             methodVisitor.visitEnd()
         }
 
+        // sans
         run {
             methodVisitor = classWriter.visitMethod(
                     Opcodes.ACC_PUBLIC,
@@ -113,6 +105,11 @@ object Interface : ClassLoader() {
                     "()Ljava/lang/String;",
                     null,
                     null
+            )
+
+            methodVisitor.visitAnnotation(
+                    "Ljava.lang.Override;",
+                    false
             )
 
             methodVisitor.visitLdcInsn("Sans")
@@ -124,7 +121,7 @@ object Interface : ClassLoader() {
         val bytes = classWriter.toByteArray()
 
         return defineClass(
-                "com.github.patrick.learnasm.build.Implementation",
+                "com.github.patrick.learnasm.build.InterfaceImplementation",
                 bytes,
                 0,
                 bytes.count()
