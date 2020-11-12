@@ -71,8 +71,15 @@ tasks {
             csv.isEnabled = false
             html.isEnabled = true
             xml.isEnabled = true
+
             html.destination = file("${buildDir}/reports/jacoco")
             xml.destination = file("${buildDir}/reports/jacoco/jacoco.xml")
+        }
+
+        afterEvaluate {
+            classDirectories.setFrom(files(classDirectories.files.filter {
+                "java" !in it.path
+            }))
         }
     }
 

@@ -31,7 +31,7 @@ object Interface : ClassLoader() {
 
         val instance = implementationClass.newInstance()
         val method = interfaceClass.getDeclaredMethod("sans")
-        println(method.invoke(instance) as String)
+        println(method.invoke(instance))
     }
 
     @JvmStatic
