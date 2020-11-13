@@ -80,6 +80,11 @@ object HelloWorld : ClassLoader() {
                     false
             )
 
+            methodVisitor.visitParameter(
+                    "args",
+                    0
+            )
+
             val start = Label()
             methodVisitor.visitLabel(start)
 
